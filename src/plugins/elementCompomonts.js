@@ -1,6 +1,75 @@
 import Vue from 'vue'
-import { Button, Container, Aside, Header, Main, MenuItemGroup, Row, Col, Menu, Submenu, MenuItem, Tooltip, Dropdown, DropdownMenu, DropdownItem, Card, Table, TableColumn } from 'element-ui'
+import {
+  Button,
+  Container,
+  Aside,
+  Header,
+  Main,
+  MenuItemGroup,
+  Row,
+  Col,
+  Menu,
+  Submenu,
+  MenuItem,
+  Tooltip,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Card,
+  Table,
+  TableColumn,
+  Breadcrumb,
+  BreadcrumbItem,
+  Icon,
+  Tag,
+  Dialog,
+  Form,
+  FormItem,
+  Input,
+  Select,
+  Option,
+  DatePicker,
+  MessageBox,
+  Message,
+  Pagination
+} from 'element-ui'
 
-const components = [Button, Container, Aside, Header, Main, MenuItemGroup, Row, Col, Menu, Submenu, MenuItem, Tooltip, Dropdown, DropdownMenu, DropdownItem, Card, Table, TableColumn]
+const components = [
+  Button,
+  Container,
+  Aside,
+  Header,
+  Main,
+  MenuItemGroup,
+  Row,
+  Col,
+  Menu,
+  Submenu,
+  MenuItem,
+  Tooltip,
+  Dropdown,
+  DropdownMenu,
+  DropdownItem,
+  Card,
+  Table,
+  TableColumn,
+  Breadcrumb,
+  BreadcrumbItem,
+  Icon,
+  Tag,
+  Dialog,
+  Form,
+  FormItem,
+  Input,
+  Select,
+  Option,
+  DatePicker,
+  MessageBox,
+  Message,
+  Pagination
+]
 
 components.forEach(item => Vue.component(item.name, item))
+
+Vue.prototype.$confirm = MessageBox.confirm
+Vue.prototype.$message = Message

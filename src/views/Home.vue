@@ -226,7 +226,7 @@ export default {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="less" scpoed>
 .user {
   display: flex;
   align-items: center;

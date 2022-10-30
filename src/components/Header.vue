@@ -1,15 +1,18 @@
 <template>
   <div class="header-container">
     <div class="left">
-      <el-button icon="el-icon-menu" size="mini" @click="changeCollapse"></el-button>
-      <span class="text">首页</span>
+      <el-button icon="el-icon-menu" style="margin-right: 20px" size="mini" @click="changeCollapse"></el-button>
+      <!-- 面包屑 -->
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item v-for="tag in tags" :key="tag.path" :to="tag.path">{{ tag.label }}</el-breadcrumb-item>
+      </el-breadcrumb>
     </div>
     <div class="right">
-      <el-dropdown>
-        <img src="@/assets/avatar.jpg" style="height: 40px">
+      <el-dropdown @command="handleCommand">
+        <img src="@/assets/avatar.jpg" style="height: 40px" />
         <el-dropdown-menu slot="dropdown">
           <el-dropdown-item>个人中心</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
@@ -17,11 +20,28 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+import Cookie from 'js-cookie'
 export default {
   methods: {
     changeCollapse() {
       this.$store.commit('changeCollapse')
+    },
+    handleCommand(command) {
+      // command === 'logout' ? Cookie.remove('token') : ''
+      if(command === 'logout') {
+        Cookie.remove('token')
+        Cookie.remove('menu')
+        this.$router.push('/login')
+      }
     }
+  },
+  computed: {
+    ...mapState({
+      tags(state) {
+        return state.tab.breadCrumb
+      }
+    })
   }
 }
 </script>
@@ -36,10 +56,27 @@ export default {
   padding: 0 20px;
 
   .left {
+    display: flex;
+    align-items: center;
     .text {
       color: #fff;
       font-size: 14px;
       margin: 10px;
+    }
+    /deep/.el-breadcrumb__item {
+      .el-breadcrumb__inner {
+        width: 55px;
+        height: 15px;
+        color: #666;
+        font-weight: normal;
+      }
+      &:last-child {
+        .el-breadcrumb__inner {
+          width: 55px;
+          height: 15px;
+          color: #fff;
+        }
+      }
     }
   }
 
@@ -47,7 +84,7 @@ export default {
     img {
       border-radius: 50%;
       margin: 2px 30px 0 0;
-      border: 1px solid #fff;;
+      border: 1px solid #fff;
     }
   }
 }

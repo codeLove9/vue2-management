@@ -1,73 +1,32 @@
 <template>
   <el-menu class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose" :collapse="isCollapse" background-color="#545c64" text-color="#fff" active-text-color="#ffd04b" router>
-    <h5>{{ isCollapse? '后台' : '后台管理系统'}}</h5>
+    <h5>{{ isCollapse ? '后台' : '后台管理系统' }}</h5>
     <!-- 没有子菜单 -->
-    <el-menu-item v-for="item in noChildren" :key="item.name" :index="item.path">
+    <el-menu-item v-for="item in noChildren" :key="item.name" :index="item.path" @click="$store.commit('refreshBreadCrumb', { path: item.path, label: item.label })">
       <i :class="`el-icon-${item.icon}`"></i>
       <span slot="title">{{ item.label }}</span>
     </el-menu-item>
 
     <!-- 有子菜单 -->
+    <!-- @click="$store.commit('refreshBreadCrumb', {path: 1, label: 2})" -->
     <el-submenu v-for="item in hasChildren" :key="item.label" index="item.label">
       <template slot="title">
         <i :class="`el-icon-${item.icon}`"></i>
         <span slot="title">{{ item.label }}</span>
       </template>
-      <el-menu-item-group v-for="menuItem in item.children" :key="menuItem.name" >
-        <el-menu-item :index="menuItem.path">{{ menuItem.label }}</el-menu-item>
+      <el-menu-item-group v-for="menuItem in item.children" :key="menuItem.name">
+        <el-menu-item :index="menuItem.path" @click="$store.commit('refreshBreadCrumb', { path: menuItem.path, label: `其他-${menuItem.label}` })">{{ menuItem.label }}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
   </el-menu>
 </template>
 
 <script>
+import Cookie from "js-cookie"
+import { mapState } from 'vuex'
 export default {
   data() {
-    return {
-      menuData: [
-        {
-          path: '/',
-          name: 'home',
-          label: '首页',
-          icon: 's-home',
-          url: 'Home/Home'
-        },
-        {
-          path: '/mall',
-          name: 'mall',
-          label: '商品管理',
-          icon: 's-shop',
-          url: 'MallManage/MallManage'
-        },
-        {
-          path: '/user',
-          name: 'user',
-          label: '用户管理',
-          icon: 'user-solid',
-          url: 'UserManage/UserManage'
-        },
-        {
-          label: '其他',
-          icon: 'location',
-          children: [
-            {
-              path: '/page1',
-              name: 'page1',
-              label: '页面1',
-              icon: 'setting',
-              url: 'Other/PageOne'
-            },
-            {
-              path: '/page2',
-              name: 'page2',
-              label: '页面2',
-              icon: 'setting',
-              url: 'Other/PageTwo'
-            }
-          ]
-        }
-      ]
-    }
+    return {}
   },
   methods: {
     handleOpen(key, keyPath) {
@@ -78,6 +37,12 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      // menuData: state => state.tab.menu
+      menuData() {
+        return JSON.parse(Cookie.get('menu'))|| this.$store.state.tab.menu
+      }
+    }),
     noChildren() {
       return this.menuData.filter(item => !item.children)
     },
@@ -107,5 +72,4 @@ export default {
     font-size: 16px;
   }
 }
-
 </style>
